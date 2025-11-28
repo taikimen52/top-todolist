@@ -2,16 +2,12 @@
 export default class Todo {
 	// プライベートプロパティ（内部処理にのみ使用）
 	// 各アイテムにユニークidを振っておく
-	#todoId = crypto.randomUUID();
+	#todoId = `id_${crypto.randomUUID()}`;
 	// 追加された日付を取得（新古順並べ替えを想定）
 	#addedDate = new Date();
 
 	// UIから書き換えOKなプロパティをコンストラクタでまとめる
-	constructor(
-		title = null,
-		dueDate = null,
-		isDone = false,
-	) {
+	constructor(title = "Title", dueDate = null, isDone = false) {
 		this.title = title;
 		this.dueDate = dueDate;
 		this.isDone = isDone;
