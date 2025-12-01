@@ -48,18 +48,40 @@ export function clearList() {
 
 // 編集ボタンクリックでモーダルウィンドウを表示
 export function openEditor(id) {
-	const dialog = document.querySelector("dialog")
+	const dialog = document.createElement("dialog")
+	dialog.setAttribute("class", "modal")
+
+	dialog.innerHTML = `
+		<form action="">
+			<input type="text" class="title-input">
+			<input type="date">
+			<button type="submit" class="save">Save</button>
+			<button class="close-modal">x</button>
+		</form>
+	`
+
+	content.appendChild(dialog);
+
 	const title = document.querySelector(".title-input")
 	const dueDate = document.querySelector("input[type=date]")
-	const targetId = todoList.findIndex((el)=> el.todoId === id);
-	
-	title.value = todoList[targetId].title;
-	dueDate.setAttribute("value", `${todoList[targetId].dueDate}`)
+	const targetIndex = todoList.findIndex((el)=> el.todoId === id);
+
+	title.value = todoList[targetIndex].title;
+	dueDate.setAttribute("value", `${todoList[targetIndex].dueDate}`)
 	dialog.showModal();
+}
+
+export function submit(id) {
+	const title = document.querySelector(".title-input")
+	const dueDate = document.querySelector("input[type=date]")
+	return {id: id,
+			title: title.value,
+			dueDate: dueDate.value
+		}
 }
 
 // モーダルを閉じる
 export function closeEditor() {
 	const dialog = document.querySelector("dialog");
-	dialog.close();
+	dialog.remove();
 }
