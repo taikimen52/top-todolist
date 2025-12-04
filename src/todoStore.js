@@ -2,7 +2,7 @@ import Todo from "./todo.js";
 
 // Todo全件をリストに格納
 export const todoList = [];
-export { addTodo, deleteTodo, updateTodo };
+export { addTodo, deleteTodo, updateTodo, changeStatus};
 
 // 操作関数群
 // 追加
@@ -18,9 +18,15 @@ function deleteTodo(id) {
 }
 
 // 更新
-function updateTodo(id, title, dueDate, isDone) {
+function updateTodo(id, title, dueDate) {
 	const targetIndex = todoList.findIndex((el) => el.todoId === id);
 	todoList[targetIndex].title = title;
 	todoList[targetIndex].dueDate = dueDate;
-	todoList[targetIndex].isDone = isDone;
+}
+
+// 完了
+function changeStatus(id) {
+	const targetIndex = todoList.findIndex((el)=>el.todoId === id);
+	let status = todoList[targetIndex].isDone;
+	todoList[targetIndex].isDone = !status;
 }

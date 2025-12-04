@@ -7,7 +7,7 @@ export default class Todo {
 	#addedDate = new Date();
 
 	// UIから書き換えOKなプロパティをコンストラクタでまとめる
-	constructor(title = "Title", dueDate = null, isDone = false) {
+	constructor(title="", dueDate="", isDone = false) {
 		this.title = title;
 		this.dueDate = dueDate;
 		this.isDone = isDone;

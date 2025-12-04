@@ -46,3 +46,7 @@ nav {
 	justify-content: flex-end;
 	gap: 10px;
 }
+
+.checkbox:checked ~ p {
+	text-decoration: line-through;
+}

@@ -1,11 +1,13 @@
 // Dom描画に使うデータは全件リストに固定
 import { todoList } from "./todoStore.js";
 
+export { Btns, displayList, clearList, openEditor, submit, closeEditor}
+
 //描画エリアの親divを取得
 const content = document.querySelector(".content");
 
 // 各ボタンを取得
-export const Btns = {
+const Btns = {
 	addBtn: document.querySelector("#add"),
 	editBtn: document.querySelector(".editbtn"),
 	deleteBtn: document.querySelector(".deletebtn"),
@@ -16,38 +18,48 @@ export const Btns = {
 };
 
 // todoListを表示
-export function displayList() {
-	for (let i = 0; i < todoList.length; i++) {
+function displayList() {
+	for (let el of todoList) {
 		// 親コンテナ作成
 		const container = document.createElement("div");
 		container.setAttribute("class", "container");
-		container.setAttribute("id", todoList[i].todoId);
-		// コンテナ内部の作成
+		container.setAttribute("id", el.todoId);
+
+		// コンテナ内部のHTML作成
 		container.innerHTML = `
 				<div class="todo">
-					<input type="checkbox">
-					<p class="title">${todoList[i].title}</p>
-					<p class="dueate">${todoList[i].dueDate}</p>
+					<input type="checkbox" class="checkbox">
+					<p class="title">${el.title}</p>
+					<p class="duedate">${el.dueDate}</p>
 				</div>
 				<div class="utilities">
 					<button class="editbtn">Edit</button>
 					<button class="deletebtn">Trash</button>
 				</div>
 			`;
+		
+		// .content内に追加し、完了タスクにcheckをつけておく
 		content.appendChild(container);
+		if(el.isDone){
+			container.querySelector(".checkbox").setAttribute("checked","")
+		}
 	}
+
+	// Todoリストの下部にもAdd Taskボタンを置く
 	const addBtnBelowList = document.createElement("button");
 	addBtnBelowList.setAttribute("class", "addbelowlist");
 	addBtnBelowList.textContent = "Add Task";
 	content.appendChild(addBtnBelowList);
 }
 
-export function clearList() {
+// ディスプレイの一旦前リセット、この後再度ディスプレイすることで変更を画面に反映する
+function clearList() {
 	content.innerHTML = "";
 }
 
 // 編集ボタンクリックでモーダルウィンドウを表示
-export function openEditor(id) {
+function openEditor(id) {
+	const target = document.querySelector(`#${id}`)
 	const dialog = document.createElement("dialog")
 	dialog.setAttribute("class", "modal")
 
@@ -59,19 +71,24 @@ export function openEditor(id) {
 			<button class="close-modal">x</button>
 		</form>
 	`
+	
+	// .content内にdialogを追加する
+	target.appendChild(dialog);
 
-	content.appendChild(dialog);
-
+	// dialog内の要素を取得し、todoリストデータの既存値を初期表示する。
 	const title = document.querySelector(".title-input")
 	const dueDate = document.querySelector("input[type=date]")
 	const targetIndex = todoList.findIndex((el)=> el.todoId === id);
 
 	title.value = todoList[targetIndex].title;
 	dueDate.setAttribute("value", `${todoList[targetIndex].dueDate}`)
+
 	dialog.showModal();
 }
 
-export function submit(id) {
+// ユーザーの入力した内容をオブジェクト化する（後でupdateTodo関数に渡すため）
+function submit() {
+	const id = document.querySelector("dialog").parentNode.id;
 	const title = document.querySelector(".title-input")
 	const dueDate = document.querySelector("input[type=date]")
 	return {id: id,
@@ -81,7 +98,7 @@ export function submit(id) {
 }
 
 // モーダルを閉じる
-export function closeEditor() {
+function closeEditor() {
 	const dialog = document.querySelector("dialog");
 	dialog.remove();
 }

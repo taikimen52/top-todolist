@@ -2,8 +2,8 @@
 
 // 必要なモジュールをインポート。データは取得せず、操作に必要な関数のみ。
 // import "./styles.css"
-import { addTodo, deleteTodo, todoList, updateTodo } from "./todoStore.js";
-import { Btns, displayList, clearList, openEditor, closeEditor, submit } from "./view.js";
+import { addTodo, deleteTodo, todoList, updateTodo, changeStatus } from "./todoStore.js";
+import { Btns, displayList, clearList, openEditor, closeEditor, submit} from "./view.js";
 import style from "./styles.css";
 
 // 新規ボタン
@@ -20,7 +20,6 @@ function addListnerToContent() {
 
     content.addEventListener("click", (e)=>{
         const id = e.target.parentNode.parentNode.id;
-        console.log(id);
         // Editボタン
         if(e.target && e.target.classList.contains("editbtn")){
             openEditor(id);
@@ -37,6 +36,13 @@ function addListnerToContent() {
             clearList();
             displayList();
         }
+
+        // チェックボックス
+        else if(e.target && e.target.classList.contains("checkbox")) {
+            changeStatus(id);
+            e.target.setAttribute("checked", "");
+        }
+
         // モーダルクローズボタン
         else if(e.target.classList.contains("close-modal")){
             e.preventDefault();
@@ -45,10 +51,8 @@ function addListnerToContent() {
         // モーダル Saveボタン
         else if(e.target.classList.contains("save")){
             e.preventDefault();
-            const target = submit(id);
-            console.log(id);
-            console.log(target)
-            updateTodo(id, target.title, target.dueDate);
+            const target = submit();
+            updateTodo(target.id, target.title, target.dueDate);
             clearList();
             displayList();
         }
