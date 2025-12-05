@@ -2,7 +2,7 @@ import Todo from "./todo.js";
 
 // Todo全件をリストに格納
 export const todoList = [];
-export { addTodo, deleteTodo, updateTodo, changeStatus};
+export { addTodo, deleteTodo, updateTodo, changeStatus, saveToStorage, lordStorage, clearStorage};
 
 // 操作関数群
 // 追加
@@ -29,4 +29,25 @@ function changeStatus(id) {
 	const targetIndex = todoList.findIndex((el)=>el.todoId === id);
 	let status = todoList[targetIndex].isDone;
 	todoList[targetIndex].isDone = !status;
+}
+
+// ローカルストレージに保存
+function saveToStorage() {
+	const listJson = JSON.stringify(todoList);
+	localStorage.setItem("myList", listJson);
+	console.log(localStorage.getItem("myList"));
+}
+
+// ローカルストレージデータの取出し
+function lordStorage() {
+	if(localStorage.getItem("myList")){
+		const listJson = localStorage.getItem("myList");
+		todoList = JSON.parse(listJson);
+	}
+	
+	console.log(todoList);
+}
+
+function clearStorage() {
+	localStorage.clear();
 }

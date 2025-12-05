@@ -11,6 +11,7 @@ const Btns = {
 	addBtn: document.querySelector("#add"),
 	editBtn: document.querySelector(".editbtn"),
 	deleteBtn: document.querySelector(".deletebtn"),
+	clearStorageBtn: document.querySelector("#clearstorage"),
 	// 以下モーダル
 	closeBtn: document.querySelector(".close-modal"),
 	saveBtn: document.querySelector(".save")

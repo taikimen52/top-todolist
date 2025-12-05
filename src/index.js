@@ -2,7 +2,7 @@
 
 // 必要なモジュールをインポート。データは取得せず、操作に必要な関数のみ。
 // import "./styles.css"
-import { addTodo, deleteTodo, todoList, updateTodo, changeStatus } from "./todoStore.js";
+import { addTodo, deleteTodo, todoList, updateTodo, changeStatus, saveToStorage, lordStorage, clearStorage } from "./todoStore.js";
 import { Btns, displayList, clearList, openEditor, closeEditor, submit} from "./view.js";
 import style from "./styles.css";
 
@@ -11,7 +11,15 @@ Btns.addBtn.addEventListener("click", () => {
     addTodo();
     clearList();
     displayList();
+    saveToStorage();
 });
+
+Btns.clearStorageBtn.addEventListener("click", ()=>{
+    clearStorage();
+    clearList();
+    displayList();
+    console.log(localStorage.getItem("myList"));
+})
 
 // 動的に生成されるTodoリスト内のボタンにイベントリスナーを設置
 function addListnerToContent() {
@@ -29,18 +37,21 @@ function addListnerToContent() {
             deleteTodo(id);
             clearList();
             displayList();
+            saveToStorage();
         }
         // Add Taskボタン
         else if(e.target && e.target.classList.contains("addbelowlist")) {
             addTodo();
             clearList();
             displayList();
+            saveToStorage();
         }
 
         // チェックボックス
         else if(e.target && e.target.classList.contains("checkbox")) {
             changeStatus(id);
             e.target.setAttribute("checked", "");
+            saveToStorage();
         }
 
         // モーダルクローズボタン
@@ -55,10 +66,14 @@ function addListnerToContent() {
             updateTodo(target.id, target.title, target.dueDate);
             clearList();
             displayList();
+            saveToStorage();
         }
 
     })
     
 }
 
+displayList();
 addListnerToContent()
+
+lordStorage();
